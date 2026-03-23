@@ -26,6 +26,8 @@ interface ChatOption {
 
 const ChatbotDynamic: React.FC = () => {
   const { state } = useAppContext();
+  const { phone, whatsapp, email } = state.contactInfo;
+  const phoneHref = `tel:${phone.replace(/\s/g, '')}`;
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -129,7 +131,7 @@ const ChatbotDynamic: React.FC = () => {
           .join('\n');
 
         addBotMessage(
-          `📍 PenitroMed\nVia dei Platani, 58B\nPenitro di Formia (LT)\n\n🕐 Orari:\n${openDays}\n\n📞 Tel: 0771 123456\n\nPosso aiutarti con altro?`,
+          `📍 PenitroMed\nVia dei Platani, 58B\nPenitro di Formia (LT)\n\n🕐 Orari:\n${openDays}\n\n📞 Tel: ${phone}\n\nPosso aiutarti con altro?`,
           [
             { id: 'book', label: '🗓️ Prenota visita', icon: 'calendar' },
             { id: 'location', label: '📍 Indicazioni', icon: 'map' },
@@ -149,11 +151,11 @@ const ChatbotDynamic: React.FC = () => {
         break;
 
       case 'call':
-        window.location.href = 'tel:+390771123456';
+        window.location.href = phoneHref;
         break;
 
       case 'whatsapp':
-        window.open(generateClinicWhatsAppLink(selectedSpec || undefined), '_blank');
+        window.open(generateClinicWhatsAppLink(selectedSpec || undefined, whatsapp), '_blank');
         break;
 
       case 'restart':
@@ -198,8 +200,8 @@ const ChatbotDynamic: React.FC = () => {
           if (doctor) {
             const schedule = state.doctorSchedules.find(ds => ds.doctorId === docId);
             const scheduleText = formatDoctorSchedule(schedule);
-            const whatsappLink = generateContactLink(doctor, selectedSpec || 'visita specialistica', 'whatsapp');
-            const phoneLink = generateContactLink(doctor, selectedSpec || 'visita specialistica', 'phone');
+            const whatsappLink = generateContactLink(doctor, selectedSpec || 'visita specialistica', 'whatsapp', state.contactInfo);
+            const phoneLink = generateContactLink(doctor, selectedSpec || 'visita specialistica', 'phone', state.contactInfo);
 
             addUserMessage(`Voglio prenotare con ${doctor.name}`);
             addBotMessage(
@@ -379,14 +381,14 @@ const ChatbotDynamic: React.FC = () => {
                   ))}
                   <div className="flex gap-2 mt-2">
                     <a
-                      href="tel:+390771123456"
+                      href={phoneHref}
                       className="flex-1 flex items-center justify-center gap-2 p-3 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
                     >
                       <Phone size={16} />
                       Chiama
                     </a>
                     <a
-                      href={generateClinicWhatsAppLink(selectedSpec || undefined)}
+                      href={generateClinicWhatsAppLink(selectedSpec || undefined, whatsapp)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 flex items-center justify-center gap-2 p-3 bg-green-500 text-white rounded-xl text-sm font-medium hover:bg-green-600 transition-colors"
@@ -419,14 +421,14 @@ const ChatbotDynamic: React.FC = () => {
         <div className="p-4 border-t border-gray-100">
           <div className="flex gap-2">
             <a
-              href="tel:+390771123456"
+              href={phoneHref}
               className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-medium"
             >
               <Phone size={18} />
               Chiama
             </a>
             <a
-              href={generateClinicWhatsAppLink()}
+              href={generateClinicWhatsAppLink(undefined, whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors font-medium"

@@ -3,6 +3,12 @@ import { AppState, ActiveSpecializationWithDoctors, ContactLink, Doctor, DoctorS
 const CLINIC_PHONE = '+39 0771 123456';
 const CLINIC_WHATSAPP = '390771123456';
 
+interface ClinicContacts {
+  phone: string;
+  whatsapp: string;
+  email: string;
+}
+
 /**
  * Estrae le specializzazioni attive con i relativi medici e orari
  * Usata dal chatbot per mostrare solo le opzioni disponibili
@@ -33,15 +39,19 @@ export const getActiveSpecializationsWithDoctors = (state: AppState): ActiveSpec
 export const generateContactLink = (
   doctor: Doctor | null,
   specialization: string,
-  contactType?: 'whatsapp' | 'email' | 'phone'
+  contactType?: 'whatsapp' | 'email' | 'phone',
+  clinicContacts?: ClinicContacts
 ): ContactLink => {
   const type = contactType || doctor?.preferredContact || 'whatsapp';
   const doctorName = doctor?.name || 'un medico';
   const message = `Buongiorno, vorrei prenotare una visita di ${specialization}${doctor ? ` con ${doctorName}` : ''} presso PenitroMed. Potete contattarmi per fissare un appuntamento? Grazie.`;
+  const fallbackWhatsapp = clinicContacts ? clinicContacts.whatsapp.replace(/[\s+]/g, '') : CLINIC_WHATSAPP;
+  const fallbackPhone = clinicContacts ? clinicContacts.phone : CLINIC_PHONE;
+  const fallbackEmail = clinicContacts ? clinicContacts.email : 'info@penitromed.it';
 
   switch (type) {
     case 'whatsapp': {
-      const phone = doctor?.phone?.replace(/\s+/g, '').replace('+', '') || CLINIC_WHATSAPP;
+      const phone = doctor?.phone?.replace(/\s+/g, '').replace('+', '') || fallbackWhatsapp;
       const encodedMessage = encodeURIComponent(message);
       return {
         type: 'whatsapp',
@@ -51,7 +61,7 @@ export const generateContactLink = (
     }
 
     case 'email': {
-      const email = doctor?.email || 'info@penitromed.it';
+      const email = doctor?.email || fallbackEmail;
       const subject = encodeURIComponent(`Richiesta prenotazione ${specialization}`);
       const body = encodeURIComponent(message);
       return {
@@ -63,7 +73,7 @@ export const generateContactLink = (
 
     case 'phone':
     default: {
-      const phone = doctor?.phone || CLINIC_PHONE;
+      const phone = doctor?.phone || fallbackPhone;
       return {
         type: 'phone',
         url: `tel:${phone.replace(/\s+/g, '')}`,
@@ -76,12 +86,12 @@ export const generateContactLink = (
 /**
  * Genera il link WhatsApp della clinica con messaggio precompilato
  */
-export const generateClinicWhatsAppLink = (specialization?: string): string => {
+export const generateClinicWhatsAppLink = (specialization?: string, clinicWhatsapp?: string): string => {
   const message = specialization
     ? `Buongiorno, vorrei prenotare una visita di ${specialization} presso PenitroMed. Potete contattarmi per fissare un appuntamento? Grazie.`
     : 'Buongiorno, vorrei prenotare una visita presso PenitroMed. Potete contattarmi per fissare un appuntamento? Grazie.';
-  
-  return `https://wa.me/${CLINIC_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  const number = clinicWhatsapp ? clinicWhatsapp.replace(/[\s+]/g, '') : CLINIC_WHATSAPP;
+  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 };
 
 /**
