@@ -19,7 +19,9 @@ type Action =
   | { type: 'UPDATE_BLOG_ARTICLE'; payload: BlogArticle }
   | { type: 'DELETE_BLOG_ARTICLE'; payload: string }
   | { type: 'TOGGLE_BLOG_ARTICLE'; payload: string }
-  | { type: 'UPDATE_CONTACT_INFO'; payload: ContactInfo };
+  | { type: 'UPDATE_CONTACT_INFO'; payload: ContactInfo }
+  | { type: 'REORDER_SPECIALIZATIONS'; payload: Specialization[] }
+  | { type: 'REORDER_DOCTORS'; payload: Doctor[] };
 
 // Reducer
 const appReducer = (state: AppState, action: Action): AppState => {
@@ -156,6 +158,20 @@ const appReducer = (state: AppState, action: Action): AppState => {
       newState = {
         ...state,
         contactInfo: action.payload,
+      };
+      break;
+
+    case 'REORDER_SPECIALIZATIONS':
+      newState = {
+        ...state,
+        specializations: action.payload,
+      };
+      break;
+
+    case 'REORDER_DOCTORS':
+      newState = {
+        ...state,
+        doctors: action.payload,
       };
       break;
 

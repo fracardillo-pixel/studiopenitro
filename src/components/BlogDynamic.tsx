@@ -1,11 +1,12 @@
-import React from 'react';
-import { Clock, ArrowRight, User, Calendar } from 'lucide-react';
+import React, { useState } from 'react';
+import { Clock, ArrowRight, User, Calendar, X } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { BlogArticle } from '../types';
 
 const BlogDynamic: React.FC = () => {
   const { state } = useAppContext();
-  
-  // Filtra solo gli articoli pubblicati e prendi i primi 3
+  const [selectedArticle, setSelectedArticle] = useState<BlogArticle | null>(null);
+
   const publishedArticles = state.blogArticles
     .filter(article => article.isPublished)
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
@@ -96,7 +97,10 @@ const BlogDynamic: React.FC = () => {
                     </div>
                   </div>
 
-                  <button className="flex items-center gap-1 text-blue-600 font-medium text-sm hover:text-blue-700 transition-colors group/btn">
+                  <button
+                    onClick={() => setSelectedArticle(article)}
+                    className="flex items-center gap-1 text-blue-600 font-medium text-sm hover:text-blue-700 transition-colors group/btn"
+                  >
                     Leggi
                     <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                   </button>
@@ -113,6 +117,82 @@ const BlogDynamic: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Article Modal */}
+      {selectedArticle && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={() => setSelectedArticle(null)}
+        >
+          <div
+            className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Cover image */}
+            <div className="relative h-64 overflow-hidden rounded-t-3xl">
+              {selectedArticle.image ? (
+                <img
+                  src={selectedArticle.image}
+                  alt={selectedArticle.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-blue-100 to-teal-100 flex items-center justify-center">
+                  <Calendar size={80} className="text-blue-300" />
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              <button
+                onClick={() => setSelectedArticle(null)}
+                className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/40 transition-colors"
+              >
+                <X size={20} />
+              </button>
+              <div className="absolute top-4 left-4">
+                <span className="px-3 py-1 bg-white/95 backdrop-blur-sm text-blue-600 rounded-full text-xs font-semibold shadow-sm">
+                  {selectedArticle.category}
+                </span>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="p-6 space-y-4">
+              {/* Meta */}
+              <div className="flex items-center gap-4 text-sm text-gray-500">
+                <span className="flex items-center gap-1">
+                  <Calendar size={14} />
+                  {formatDate(selectedArticle.publishedAt)}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock size={14} />
+                  {selectedArticle.readTime}
+                </span>
+              </div>
+
+              {/* Title */}
+              <h2 className="text-2xl font-bold text-gray-800 leading-tight">
+                {selectedArticle.title}
+              </h2>
+
+              {/* Author */}
+              <div className="flex items-center gap-3 py-3 border-y border-gray-100">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <User size={20} className="text-blue-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-gray-800">{selectedArticle.author}</p>
+                  <p className="text-sm text-gray-500">{selectedArticle.authorRole}</p>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="text-gray-700 leading-relaxed whitespace-pre-line">
+                {selectedArticle.content || selectedArticle.excerpt}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
