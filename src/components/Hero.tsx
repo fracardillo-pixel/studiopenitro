@@ -144,7 +144,7 @@ export default function Hero() {
           <div className="relative">
             <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="https://i.ibb.co/4wdCJQJW/penitromed4.png"
+                src="/penitromed4.png"
                 alt="Team medico PenitroMed"
                 className="w-full h-auto object-cover"
               />
