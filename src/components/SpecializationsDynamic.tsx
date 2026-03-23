@@ -6,6 +6,10 @@ import { useAppContext } from '../context/AppContext';
 const SpecializationsDynamic: React.FC = () => {
   const { state } = useAppContext();
   
+  const { phone, whatsapp } = state.contactInfo;
+  const phoneHref = `tel:${phone.replace(/\s/g, '')}`;
+  const whatsappHref = `https://wa.me/${whatsapp.replace(/[\s+]/g, '')}?text=${encodeURIComponent('Buongiorno, vorrei informazioni sulle vostre specializzazioni. Grazie.')}`;
+
   // Filtra solo le specializzazioni attive
   const activeSpecs = state.specializations.filter(spec => spec.isActive);
 
@@ -45,7 +49,7 @@ const SpecializationsDynamic: React.FC = () => {
                 {spec.description}
               </p>
               <a
-                href="tel:+390771123456"
+                href={phoneHref}
                 className="inline-flex items-center gap-2 text-blue-600 font-medium text-sm hover:text-blue-700 transition-colors"
               >
                 <Phone size={16} />
@@ -67,14 +71,14 @@ const SpecializationsDynamic: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:+390771123456"
+              href={phoneHref}
               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
             >
               <Phone size={20} />
-              Chiama 0771 123456
+              Chiama {phone}
             </a>
             <a
-              href="https://wa.me/390771123456?text=Buongiorno%2C%20vorrei%20informazioni%20sulle%20vostre%20specializzazioni.%20Grazie."
+              href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white rounded-xl font-medium hover:bg-green-600 transition-colors"
