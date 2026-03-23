@@ -66,12 +66,19 @@ export interface BlogArticle {
   isPublished: boolean;
 }
 
+export interface ContactInfo {
+  phone: string;
+  whatsapp: string;
+  email: string;
+}
+
 export interface AppState {
   specializations: Specialization[];
   doctors: Doctor[];
   doctorSchedules: DoctorSchedule[];
   clinicHours: ClinicHours;
   blogArticles: BlogArticle[];
+  contactInfo: ContactInfo;
 }
 
 // Tipi per le funzioni di supporto del chatbot

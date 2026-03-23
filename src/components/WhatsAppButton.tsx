@@ -1,9 +1,14 @@
 import { MessageCircle } from 'lucide-react';
+import { useAppContext } from '../context/AppContext';
 
 export default function WhatsAppButton() {
+  const { state } = useAppContext();
+  const { whatsapp } = state.contactInfo;
+  const whatsappHref = `https://wa.me/${whatsapp.replace(/[\s+]/g, '')}?text=Ciao%2C%20vorrei%20informazioni%20sui%20vostri%20servizi%20medici`;
+
   return (
     <a
-      href="https://wa.me/39331000000?text=Ciao%2C%20vorrei%20informazioni%20sui%20vostri%20servizi%20medici"
+      href={whatsappHref}
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 left-6 z-50 group"

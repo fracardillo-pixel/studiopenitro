@@ -1,4 +1,4 @@
-import { AppState, WeekSchedule } from '../types';
+import { AppState, WeekSchedule, ContactInfo } from '../types';
 
 const defaultWeekSchedule: WeekSchedule = {
   monday: { isOpen: true, slots: [{ start: '09:00', end: '13:00' }, { start: '15:00', end: '19:00' }] },
@@ -152,6 +152,11 @@ export const initialData: AppState = {
   clinicHours: {
     weekSchedule: defaultWeekSchedule,
   },
+  contactInfo: {
+    phone: '+39 0771 000 000',
+    whatsapp: '+39 331 000 0000',
+    email: 'info@penitromed.it',
+  },
   blogArticles: [
     {
       id: 'blog-1',
@@ -219,6 +224,13 @@ export const loadFromStorage = (): AppState | null => {
         ...a,
         publishedAt: new Date(a.publishedAt),
       }));
+      if (!data.contactInfo) {
+        data.contactInfo = {
+          phone: '+39 0771 000 000',
+          whatsapp: '+39 331 000 0000',
+          email: 'info@penitromed.it',
+        };
+      }
       return data;
     } catch {
       return null;

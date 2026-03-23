@@ -8,6 +8,7 @@ import {
   Clock,
   Phone,
   MessageCircle,
+  Mail,
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
@@ -171,33 +172,47 @@ const DashboardSection: React.FC<DashboardSectionProps> = ({ onNavigate }) => {
 
         {/* Contatti Rapidi */}
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">📞 Contatti Configurati</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">📞 Contatti Configurati</h3>
+            <button
+              onClick={() => onNavigate('contacts')}
+              className="text-sm text-blue-600 hover:text-blue-700"
+            >
+              Modifica →
+            </button>
+          </div>
           
-          <div className="space-y-4">
-            <div className="flex items-center gap-4 p-4 bg-green-50 rounded-lg">
-              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-                <MessageCircle size={24} className="text-white" />
+          <div className="space-y-3">
+            <div className="flex items-center gap-4 p-3 bg-blue-50 rounded-lg">
+              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <Phone size={20} className="text-white" />
               </div>
               <div>
-                <p className="font-medium text-gray-800">WhatsApp</p>
-                <p className="text-sm text-gray-500">+39 0771 123456</p>
+                <p className="text-xs font-medium text-blue-400 uppercase">Telefono</p>
+                <p className="text-sm font-semibold text-gray-800">{state.contactInfo.phone}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-lg">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                <Phone size={24} className="text-white" />
+            <div className="flex items-center gap-4 p-3 bg-green-50 rounded-lg">
+              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <MessageCircle size={20} className="text-white" />
               </div>
               <div>
-                <p className="font-medium text-gray-800">Telefono</p>
-                <p className="text-sm text-gray-500">+39 0771 123456</p>
+                <p className="text-xs font-medium text-green-400 uppercase">WhatsApp</p>
+                <p className="text-sm font-semibold text-gray-800">{state.contactInfo.whatsapp}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 p-3 bg-teal-50 rounded-lg">
+              <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <Mail size={20} className="text-white" />
+              </div>
+              <div>
+                <p className="text-xs font-medium text-teal-400 uppercase">Email</p>
+                <p className="text-sm font-semibold text-gray-800">{state.contactInfo.email}</p>
               </div>
             </div>
           </div>
-
-          <p className="text-xs text-gray-400 mt-4">
-            I contatti sono usati dal chatbot per generare i link di prenotazione
-          </p>
         </div>
       </div>
 

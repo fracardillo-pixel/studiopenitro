@@ -1,10 +1,16 @@
 import { Phone, Mail, MapPin, Clock, Car, Facebook, Instagram, Linkedin, Settings } from 'lucide-react';
+import { useAppContext } from '../context/AppContext';
 
 interface FooterProps {
   onAdminClick?: () => void;
 }
 
 export default function Footer({ onAdminClick }: FooterProps) {
+  const { state } = useAppContext();
+  const { phone, whatsapp, email } = state.contactInfo;
+  const phoneHref = `tel:${phone.replace(/\s/g, '')}`;
+  const mailHref = `mailto:${email}`;
+
   return (
     <footer id="contatti" className="bg-blue-900 text-white">
       {/* Contact & Map Section */}
@@ -37,10 +43,10 @@ export default function Footer({ onAdminClick }: FooterProps) {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">Telefono</h3>
-                  <a href="tel:+390771000000" className="text-blue-200 hover:text-white transition-colors">
-                    +39 0771 000 000
+                  <a href={phoneHref} className="text-blue-200 hover:text-white transition-colors">
+                    {phone}
                   </a>
-                  <p className="text-sm text-blue-300 mt-1">WhatsApp: +39 331 000 0000</p>
+                  <p className="text-sm text-blue-300 mt-1">WhatsApp: {whatsapp}</p>
                 </div>
               </div>
 
@@ -50,8 +56,8 @@ export default function Footer({ onAdminClick }: FooterProps) {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">Email</h3>
-                  <a href="mailto:info@penitromed.it" className="text-blue-200 hover:text-white transition-colors">
-                    info@penitromed.it
+                  <a href={mailHref} className="text-blue-200 hover:text-white transition-colors">
+                    {email}
                   </a>
                 </div>
               </div>

@@ -5,6 +5,7 @@ import SpecializationsSection from './SpecializationsSection';
 import DoctorsSection from './DoctorsSection';
 import ScheduleSection from './ScheduleSection';
 import BlogSection from './BlogSection';
+import ContactSection from './ContactSection';
 
 interface AdminPanelProps {
   onExit: () => void;
@@ -25,6 +26,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onExit }) => {
         return <ScheduleSection />;
       case 'blog':
         return <BlogSection />;
+      case 'contacts':
+        return <ContactSection />;
       default:
         return <DashboardSection onNavigate={setCurrentSection} />;
     }

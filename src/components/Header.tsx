@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { Menu, X, Phone, MessageCircle } from 'lucide-react';
+import { useAppContext } from '../context/AppContext';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { state } = useAppContext();
+  const { phone, whatsapp } = state.contactInfo;
+
+  const phoneHref = `tel:${phone.replace(/\s/g, '')}`;
+  const whatsappHref = `https://wa.me/${whatsapp.replace(/[\s+]/g, '')}`;
 
   const navLinks = [
     { name: 'Home', href: '#home' },
@@ -51,14 +57,14 @@ export default function Header() {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
             <a
-              href="tel:+390771123456"
+              href={phoneHref}
               className="flex items-center gap-2 px-4 py-2 text-blue-700 border-2 border-blue-600 rounded-full hover:bg-blue-50 transition-colors font-medium"
             >
               <Phone size={18} />
               <span>Chiama ora</span>
             </a>
             <a
-              href="https://wa.me/390771123456"
+              href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors font-medium"
@@ -94,14 +100,14 @@ export default function Header() {
             ))}
             <div className="flex flex-col gap-3 mt-4">
               <a
-                href="tel:+390771000000"
+                href={phoneHref}
                 className="flex items-center justify-center gap-2 px-4 py-3 text-blue-700 border-2 border-blue-600 rounded-full font-medium"
               >
                 <Phone size={18} />
                 <span>Chiama ora</span>
               </a>
               <a
-                href="https://wa.me/39331000000"
+                href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 px-4 py-3 bg-green-500 text-white rounded-full font-medium"

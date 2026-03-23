@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
-import { AppState, Specialization, Doctor, DoctorSchedule, ClinicHours, BlogArticle } from '../types';
+import { AppState, Specialization, Doctor, DoctorSchedule, ClinicHours, BlogArticle, ContactInfo } from '../types';
 import { initialData, saveToStorage, loadFromStorage } from '../data/initialData';
 
 // Action types
@@ -18,7 +18,8 @@ type Action =
   | { type: 'ADD_BLOG_ARTICLE'; payload: BlogArticle }
   | { type: 'UPDATE_BLOG_ARTICLE'; payload: BlogArticle }
   | { type: 'DELETE_BLOG_ARTICLE'; payload: string }
-  | { type: 'TOGGLE_BLOG_ARTICLE'; payload: string };
+  | { type: 'TOGGLE_BLOG_ARTICLE'; payload: string }
+  | { type: 'UPDATE_CONTACT_INFO'; payload: ContactInfo };
 
 // Reducer
 const appReducer = (state: AppState, action: Action): AppState => {
@@ -148,6 +149,13 @@ const appReducer = (state: AppState, action: Action): AppState => {
         blogArticles: state.blogArticles.map((a) =>
           a.id === action.payload ? { ...a, isPublished: !a.isPublished } : a
         ),
+      };
+      break;
+
+    case 'UPDATE_CONTACT_INFO':
+      newState = {
+        ...state,
+        contactInfo: action.payload,
       };
       break;
 

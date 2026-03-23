@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Phone, MessageCircle, CheckCircle } from 'lucide-react';
+import { Phone, MessageCircle, Mail, CheckCircle } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { WeekSchedule } from '../types';
 
@@ -16,7 +16,11 @@ const dayNames: { key: keyof WeekSchedule; abbr: string; full: string }[] = [
 
 export default function Hero() {
   const { state } = useAppContext();
-  
+  const { phone, whatsapp, email } = state.contactInfo;
+  const phoneHref = `tel:${phone.replace(/\s/g, '')}`;
+  const whatsappHref = `https://wa.me/${whatsapp.replace(/[\s+]/g, '')}`;
+  const mailHref = `mailto:${email}`;
+
   // Formatta gli orari del poliambulatorio per la visualizzazione raggruppando i giorni
   const groupedSchedules = useMemo(() => {
     const weekSchedule = state.clinicHours?.weekSchedule;
@@ -107,20 +111,27 @@ export default function Hero() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <a
-                href="tel:+390771000000"
+                href={phoneHref}
                 className="flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg shadow-blue-300 font-semibold text-lg"
               >
                 <Phone size={22} />
                 <span>Chiama ora</span>
               </a>
               <a
-                href="https://wa.me/39331000000"
+                href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 px-8 py-4 bg-green-500 text-white rounded-full hover:bg-green-600 transition-all shadow-lg shadow-green-200 font-semibold text-lg"
               >
                 <MessageCircle size={22} />
                 <span>Scrivici su WhatsApp</span>
+              </a>
+              <a
+                href={mailHref}
+                className="flex items-center justify-center gap-3 px-8 py-4 bg-teal-500 text-white rounded-full hover:bg-teal-600 transition-all shadow-lg shadow-teal-200 font-semibold text-lg"
+              >
+                <Mail size={22} />
+                <span>Invia Email</span>
               </a>
             </div>
 

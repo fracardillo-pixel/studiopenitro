@@ -5,6 +5,7 @@ import {
   Users,
   Calendar,
   FileText,
+  Phone,
   Menu,
   X,
   Home,
@@ -31,6 +32,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     { id: 'doctors', label: 'Equipe Medica', icon: Users },
     { id: 'schedule', label: 'Calendario e Orari', icon: Calendar },
     { id: 'blog', label: 'Blog e Consigli', icon: FileText },
+    { id: 'contacts', label: 'Contatti', icon: Phone },
   ];
 
   return (
